@@ -5,22 +5,17 @@
         <h2 class="modal-title"><span class="glyphicon glyphicon-time"></span> Time to Sweebr Up!</h2>
       </div>
       <div class="modal-body">
-        <form role="form">
-          <div class="form-group">
-            <label class="control-label">Conversation Name</label>
-             <input class="form-control input-lg" type="text" ng-model="conversation"
-                    placeholder="Start a new conversation or join existing" autofocus>
-          </div>
+        <form role="form" ng-submit="join(nickname)">
           <div class="form-group">
             <label class="control-label">Nickname</label>
-            <input class="form-control input-lg" ng-model="nickname"
+            <input class="form-control input-lg" ng-model="nickname" autofocus
                    type="text" placeholder="You in the conversation"> 
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger btn-lg btn-block"
-                ng-click="join(conversation, nickname)">
+                ng-click="join(nickname)">
           <span class="glyphicon glyphicon-send"></span> Ok, let's go!
         </button>
       </div>

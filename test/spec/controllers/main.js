@@ -110,7 +110,7 @@ describe('Controller: MainCtrl', function () {
       hide: jasmine.createSpy('scope.modalInstance.hide')
     };
 
-    scope.join('The Conversation', 'Roman');
+    scope.join('Roman');
 
     expect(messageReceived).toBe(true);
     expect(scope.modalInstance.hide).toHaveBeenCalled();

@@ -23,13 +23,12 @@ angular.module('sweebrupApp')
       backdrop: 'static'
     });
 
-    // emit request from user to join a conversation under a nickname
-    $scope.join = function (conversation, nickname) {
-      // do not let join empty user/conversation
-      if (conversation === '' || nickname === '') {
+    // emit request from user to join the conversation under a nickname
+    $scope.join = function (nickname) {
+      // do not let join empty user nickname
+      if (nickname === '') {
         return;
       }
-      $scope.user.conversation = conversation;
       $scope.user.nickname = nickname;
       $scope.user.date = new Date();
       $scope.user.status = 'joined';

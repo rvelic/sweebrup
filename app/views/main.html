@@ -15,7 +15,7 @@
         </span>
         <div class="media-body text-muted" ng-if="message.status">
           <h4 class="media-heading">{{ message.date | date:'mediumTime' }}</h4>
-          <strong>{{ message.nickname }}</strong> <i>{{ message.status }}</i> {{ message.conversation }}
+          <strong>{{ message.nickname }}</strong> has {{ message.status }} the conversation
         </div>
         <div class="media-body" ng-if="message.text">
           <h4 class="media-heading">{{ message.nickname }} <small>{{ message.date | date:'mediumTime' }}</small> </h4>
