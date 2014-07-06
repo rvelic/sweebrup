@@ -27,9 +27,14 @@
   <div class="panel-footer">
     <form ng-submit="sendMessage()">
       <div class="input-group input-group-lg">
-        <span class="input-group-addon"><span class="glyphicon glyphicon-comment"></span></span>
+        <span class="input-group-addon" ng-click="sendMessage()">
+          <span class="glyphicon glyphicon-envelope"></span>
+        </span>
         <input class="form-control input-lg" type="text" ng-model="message"
                placeholder="Say what you think..">
+        <span class="input-group-addon" ng-click="asideInstance.show()">
+          <span class="glyphicon glyphicon-gift"></span>
+        </span>
       </div>
     </form>
   </div>

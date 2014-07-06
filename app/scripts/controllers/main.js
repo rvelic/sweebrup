@@ -8,7 +8,7 @@
  * Controller of the sweebrupApp
  */
 angular.module('sweebrupApp')
-  .controller('MainCtrl', function ($scope, Socket, $modal) {
+  .controller('MainCtrl', function ($scope, Socket, $modal, $aside) {
     // init
     $scope.messages = [];
     $scope.glued = false;
@@ -21,6 +21,21 @@ angular.module('sweebrupApp')
       animation: 'am-fade-and-scale',
       backdrop: 'static'
     });
+
+    // Pre-fetch an external template populated with a custom scope
+    $scope.asideInstance = $aside({
+      scope: $scope, 
+      template: 'views/aside.html',
+      show: false
+    });
+
+    $scope.selectedGift = 'Drink';
+    $scope.gifts = [
+      {value: 'Drink', label: '<span class="glyphicon glyphicon-glass"></span> Drink'},
+      {value: 'Song', label: '<span class="glyphicon glyphicon-music"></span> Song'},
+      {value: 'Movie', label: '<span class="glyphicon glyphicon-film"></span> Movie'},
+      {value: 'Dinner', label: '<span class="glyphicon glyphicon-cutlery"></span> Dinner'}
+    ];
 
     // emit request from user to join the conversation under a nickname
     $scope.join = function (nickname) {
@@ -54,7 +69,7 @@ angular.module('sweebrupApp')
         nickname: $scope.user.nickname,
         date: new Date()
       });
-      
+
       $scope.message = undefined; // clear the input field
     };
 
