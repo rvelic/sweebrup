@@ -5,7 +5,7 @@
   see: https://github.com/btford/angular-socket-io-seed/issues/4
 */
 
-var SockMock = function($rootScope){
+var SockMock = function(){
   this.events = {};
 
   // Receive Events
@@ -20,9 +20,7 @@ var SockMock = function($rootScope){
   this.emit = function(eventName, data, emitCallback){
     if(this.events[eventName]){
       angular.forEach(this.events[eventName], function(callback){
-        $rootScope.$apply(function() {
-          callback(data);
-        });
+        callback(data);
       });
     }
     if(emitCallback) {
@@ -45,7 +43,7 @@ describe('Controller: MainCtrl', function () {
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
     modal = jasmine.createSpy('modal'); // spy on modal
-    socketMock = new SockMock($rootScope); // mock the socket.io
+    socketMock = new SockMock(); // mock the socket.io
     MainCtrl = $controller('MainCtrl', {
       $scope: scope,
       Socket: socketMock,
@@ -100,10 +98,12 @@ describe('Controller: MainCtrl', function () {
   });
 
   it('should join a user and close the modal', function () {
-    var messageReceived = false;
     
     socketMock.on('join user', function () {
-      messageReceived = true;
+      socketMock.emit('receive message', { 
+        status: 'joined',
+        nickname: 'Roman',
+      });
     });
 
     scope.modalInstance = {
@@ -112,8 +112,28 @@ describe('Controller: MainCtrl', function () {
 
     scope.join('Roman');
 
-    expect(messageReceived).toBe(true);
     expect(scope.modalInstance.hide).toHaveBeenCalled();
+
+  });
+
+  it('should remove the user from conversation and open the modal', function () {
+    
+    socketMock.on('leave conversation', function () {
+      socketMock.emit('receive message', { 
+        status: 'left',
+        nickname: 'Roman',
+      });
+    });
+
+    scope.modalInstance = {
+      show: jasmine.createSpy('scope.modalInstance.show'),
+      hide: jasmine.createSpy('scope.modalInstance.hide'),
+    };
+
+    scope.join('Roman');
+    scope.leave();
+
+    expect(scope.modalInstance.show).toHaveBeenCalled();
 
   });
 

@@ -1,30 +1,40 @@
-var app = require('http').createServer(handler)
-var io = require('socket.io')(app);
-var fs = require('fs');
+var app = require('http').createServer(handler),
+    io = require('socket.io')(app);
 
 // socket.io will listen on this port
 app.listen(3000);
 
-// handle requests
+// handler
 function handler (req, res) {
-  fs.readFile(__dirname + 'index.html',
-  function (err, data) {
-    if (err) {
-      res.writeHead(500);
-      return res.end('This is not the site you are loooking for.');
-    }
-
-    res.writeHead(200);
-    res.end(data);
-  });
+  res.writeHead(200);
+  res.end();
 }
+
+// array of unique nicknames joined to the conversation
+var nicknames = [];
 
 // handle socket app events
 io.on('connection', function (socket) {
+  // Send message - can be text or status
   socket.on('send message', function (message) {
     io.emit('receive message', message);
   });
-  socket.on('join user', function (message) {
+  // Leave conversation
+  socket.on('leave conversation', function (message) {
+    var nickname = message.nickname.toLowerCase(),
+        idx = nicknames.indexOf(nickname);
+    // if nickname exists, free it for others to use
+    if (idx > -1) {
+      nicknames.splice(idx, 1);
+    }    
     io.emit('receive message', message);
+  });
+  // Join user to conversation
+  socket.on('join user', function (message) {
+    var nickname = message.nickname.toLowerCase();
+    if (nicknames.indexOf(nickname) < 0) {
+      nicknames.push(nickname);
+      io.emit('receive message', message);
+    }
   });
 });

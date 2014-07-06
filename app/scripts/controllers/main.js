@@ -34,7 +34,14 @@ angular.module('sweebrupApp')
       $scope.user.status = 'joined';
 
       Socket.emit('join user', $scope.user);
-      $scope.modalInstance.hide();
+    };
+
+    // emit request from user to leave the conversation
+    $scope.leave = function () {
+      $scope.user.date = new Date();
+      $scope.user.status = 'left';
+
+      Socket.emit('leave conversation', $scope.user);
     };
 
     // emit request for new message
@@ -43,7 +50,6 @@ angular.module('sweebrupApp')
       if ($scope.message === '') {
         return;
       }
-
       Socket.emit('send message', { 
         text: $scope.message,
         nickname: $scope.user.nickname,
@@ -52,9 +58,17 @@ angular.module('sweebrupApp')
       $scope.message = undefined; // clear the input field
     };
 
-    // push new message to messages array. Message can be a text from user
-    // or a status of user joining/leaving.
+    // push new message to messages array. 
+    // Message can be a text from user or a status of user.
     Socket.on('receive message', function (message) {
+      // if message nickname is ours and we just joined, we'll close the modal as well   
+      if (message.status === 'joined' && message.nickname === $scope.user.nickname) {
+        $scope.modalInstance.hide();
+      }
+      // if message nickname is ours and we just left, we'll open the modal as well   
+      if (message.status === 'left' && message.nickname === $scope.user.nickname) {
+        $scope.modalInstance.show();
+      }
       $scope.messages.push(message);
       $scope.$apply();
       // fire autoscroll when new message appears
