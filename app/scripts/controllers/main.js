@@ -8,7 +8,7 @@
  * Controller of the sweebrupApp
  */
 angular.module('sweebrupApp')
-  .controller('MainCtrl', function ($scope, Socket, $modal, $aside) {
+  .controller('MainCtrl', function ($scope, Socket, $modal, $aside, $alert) {
     // init
     $scope.messages = [];
     $scope.glued = false;
@@ -39,7 +39,7 @@ angular.module('sweebrupApp')
     // emit request from user to join the conversation under a nickname
     $scope.join = function (nickname) {
       // do not let join empty user nickname
-      if (nickname === '') {
+      if (!nickname) {
         return;
       }
       $scope.user.nickname = nickname;
@@ -60,7 +60,7 @@ angular.module('sweebrupApp')
     // emit request for new message
     $scope.sendMessage = function () {
       // do not send empty messages
-      if ($scope.message === '') {
+      if (!$scope.message) {
         return;
       }
       Socket.emit('send message', { 
@@ -75,17 +75,15 @@ angular.module('sweebrupApp')
     // emit request for new message
     $scope.sendGift = function (gift, buddy) {
       // do not send empty gifts
-      if (gift === '' || buddy === '') {
+      if (!gift || !buddy) {
         return;
       }
       Socket.emit('send gift', { 
         gift: gift,
-        from: $scope.user.nickname,
-        to: buddy,
+        nickname: $scope.user.nickname,
+        buddy: buddy,
         date: new Date()
       });
-
-      $scope.asideInstance.hide(); // close the aside
     };
 
     // push new message to messages array. 
@@ -99,10 +97,25 @@ angular.module('sweebrupApp')
       if (message.status === 'left' && message.nickname === $scope.user.nickname) {
         $scope.modalInstance.show();
       }
+
       $scope.messages.push(message);
       $scope.$digest();
       // fire autoscroll when new message appears
       $scope.glued = !$scope.glued;
       $scope.$apply();
+    });
+
+    // receive and display error message if for the user
+    Socket.on('error message', function (error) {
+      if (error.nickname === $scope.user.nickname) {
+        $alert({
+          'title': 'Holy guacamole!',
+          'content': error.message,
+          'type': 'danger',
+          'animation': 'am-fade-and-slide-top',
+          'container': '.alerts-container',
+          'duration': 3,
+        });
+      }
     });
   });

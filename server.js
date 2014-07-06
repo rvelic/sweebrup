@@ -21,8 +21,18 @@ io.on('connection', function (socket) {
   });
   // Send gift
   socket.on('send gift', function (gift) {
-    // redis saves the gift here
-    io.emit('receive message', gift);
+    var nickname = gift.buddy.toLowerCase(),
+        idx = nicknames.indexOf(nickname);
+    // if nickname exists, we'll emit the message
+    if (idx > -1) {
+      // HERE WE CAN PERSIST GIFTS via Sweebr API / CouchDB
+      io.emit('receive message', gift);
+    } else {
+      io.emit('error message', {
+        nickname: gift.nickname,
+        message: 'Wrong Nickname',
+      });
+    }
   });
   // Leave conversation
   socket.on('leave conversation', function (message) {
@@ -40,6 +50,11 @@ io.on('connection', function (socket) {
     if (nicknames.indexOf(nickname) < 0) {
       nicknames.push(nickname);
       io.emit('receive message', message);
+    } else {
+      io.emit('error message', {
+        nickname: message.nickname,
+        message: 'Somebody already thought of that nickname. Be more creative.',
+      });
     }
   });
 });

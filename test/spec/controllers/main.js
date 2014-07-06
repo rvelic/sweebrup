@@ -34,19 +34,22 @@ describe('Controller: MainCtrl', function () {
     scope,
     modal,
     aside,
-    socketMock;
+    socketMock,
+    alert;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
     modal = jasmine.createSpy('modal'); // spy on modal
     aside = jasmine.createSpy('aside'); // spy on aside
+    alert = jasmine.createSpy('alert'); // spy on alert
     socketMock = new SockMock(); // mock the socket.io
     MainCtrl = $controller('MainCtrl', {
       $scope: scope,
       Socket: socketMock,
       $modal: modal,
-      $aside: aside
+      $aside: aside,
+      $alert: alert,
     });
   }));
 
@@ -131,7 +134,7 @@ describe('Controller: MainCtrl', function () {
     expect(scope.modalInstance.show).toHaveBeenCalled();
   });
 
-  it('should send gift and hide aside instance', function () {
+  it('should join and send a gift', function () {
     socketMock.on('send gift', function () {
       socketMock.emit('receive message', { 
         gift: 'Drink',
@@ -140,14 +143,24 @@ describe('Controller: MainCtrl', function () {
       });
     });
 
-    scope.asideInstance = {
-      hide: jasmine.createSpy('scope.asideInstance.hide'),
-      show: jasmine.createSpy('scope.asideInstance.show'),
-    };
-
     scope.join('Roman');
     scope.sendGift('Drink', 'Rene');
 
-    expect(scope.asideInstance.hide).toHaveBeenCalled();
+    expect(scope.messages.length).toBe(1);
+  });
+
+  it('should not join duplicate user and should alert', function () {
+    scope.user.nickname = 'Roman';
+
+    socketMock.on('join user', function () {
+      socketMock.emit('error message', { 
+        message: 'error',
+        nickname: 'Roman',
+      });
+    });
+
+    scope.join('Roman');
+
+    expect(alert).toHaveBeenCalled();
   });
 });
