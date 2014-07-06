@@ -1,13 +1,36 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title"><img src="images/sweebr.png" alt="Sweebr Up!"> 
+    <h3 class="panel-title">
+      <img src="images/sweebr.png" alt="Sweebr Up!"> 
       <span class="text-muted">Up!</span>
       <a href="" class="btn btn-default btn-sm pull-right">
         <span class="glyphicon glyphicon-log-out"></span> I'm leaving!</a>
     </h3>
   </div>
-  <div class="panel-body chat-body"></div>
+  <div class="panel-body chat-body" scroll-glue ng-model="glued">
+    <ul class="media-list">
+      <li class="media" ng-repeat="message in messages">
+        <span class="chat-icon pull-left glyphicon"
+              ng-class="{'glyphicon-time text-muted': message.status, 'glyphicon-user': message.text }">
+        </span>
+        <div class="media-body text-muted" ng-if="message.status">
+          <h4 class="media-heading">{{ message.date | date:'mediumTime' }}</h4>
+          <strong>{{ message.nickname }}</strong> <i>{{ message.status }}</i> {{ message.conversation }}
+        </div>
+        <div class="media-body" ng-if="message.text">
+          <h4 class="media-heading">{{ message.nickname }} <small>{{ message.date | date:'mediumTime' }}</small> </h4>
+          {{ message.text }}
+        </div>
+      </li>
+    </ul>
+  </div>
   <div class="panel-footer">
-    <textarea class="form-control" rows="3" placeholder="Say what you think.."></textarea>
+    <form ng-submit="sendMessage()">
+      <div class="input-group input-group-lg">
+        <span class="input-group-addon"><span class="glyphicon glyphicon-comment"></span></span>
+        <input class="form-control input-lg" type="text" ng-model="message"
+               placeholder="Say what you think..">
+      </div>
+    </form>
   </div>
 </div>

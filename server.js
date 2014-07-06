@@ -2,14 +2,16 @@ var app = require('http').createServer(handler)
 var io = require('socket.io')(app);
 var fs = require('fs');
 
+// socket.io will listen on this port
 app.listen(3000);
 
+// handle requests
 function handler (req, res) {
   fs.readFile(__dirname + 'index.html',
   function (err, data) {
     if (err) {
       res.writeHead(500);
-      return res.end('Error loading index.html');
+      return res.end('This is not the site you are loooking for.');
     }
 
     res.writeHead(200);
@@ -17,9 +19,12 @@ function handler (req, res) {
   });
 }
 
+// handle socket app events
 io.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
+  socket.on('send message', function (message) {
+    io.emit('receive message', message);
+  });
+  socket.on('join user', function (message) {
+    io.emit('receive message', message);
   });
 });

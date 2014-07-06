@@ -5,10 +5,21 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/font
 
 /* Space out content a bit */
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
 .chat-body {
-  min-height: 360px;
+  height: 360px;
+  overflow-y: scroll;
+  word-wrap: break-word;
+}
+
+.chat-icon {
+  font-size: 26px;
+}
+
+.modal-header {
+  color: rgb(193, 40, 45);
+  background-color: $gray-lighter;
 }
