@@ -7,6 +7,7 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/font
 body {
   padding-top: 30px;
   padding-bottom: 30px;
+  background-color: $gray-light;
 }
 
 .chat-body {
@@ -22,4 +23,8 @@ body {
 .modal-header {
   color: rgb(193, 40, 45);
   background-color: $gray-lighter;
+}
+
+.footer {
+  color: #fff;
 }

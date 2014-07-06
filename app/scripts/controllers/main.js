@@ -29,7 +29,6 @@ angular.module('sweebrupApp')
       show: false
     });
 
-    $scope.selectedGift = 'Drink';
     $scope.gifts = [
       {value: 'Drink', label: '<span class="glyphicon glyphicon-glass"></span> Drink'},
       {value: 'Song', label: '<span class="glyphicon glyphicon-music"></span> Song'},
@@ -71,6 +70,22 @@ angular.module('sweebrupApp')
       });
 
       $scope.message = undefined; // clear the input field
+    };
+
+    // emit request for new message
+    $scope.sendGift = function (gift, buddy) {
+      // do not send empty gifts
+      if (gift === '' || buddy === '') {
+        return;
+      }
+      Socket.emit('send gift', { 
+        gift: gift,
+        from: $scope.user.nickname,
+        to: buddy,
+        date: new Date()
+      });
+
+      $scope.asideInstance.hide(); // close the aside
     };
 
     // push new message to messages array. 

@@ -11,7 +11,9 @@
     <ul class="media-list">
       <li class="media" ng-repeat="message in messages">
         <span class="chat-icon pull-left glyphicon"
-              ng-class="{'glyphicon-time text-muted': message.status, 'glyphicon-user': message.text }">
+              ng-class="{'glyphicon-time text-muted': message.status, 
+                         'glyphicon-user': message.text,
+                         'glyphicon-gift text-primary': message.gift }">
         </span>
         <div class="media-body text-muted" ng-if="message.status">
           <h4 class="media-heading">{{ message.date | date:'mediumTime' }}</h4>
@@ -20,6 +22,10 @@
         <div class="media-body" ng-if="message.text">
           <h4 class="media-heading">{{ message.nickname }} <small>{{ message.date | date:'mediumTime' }}</small> </h4>
           {{ message.text }}
+        </div>
+        <div class="media-body text-primary" ng-if="message.gift">
+          <h4 class="media-heading">Thanks!</h4>
+          {{ message.from }} sent a <strong>{{ message.gift }}</strong> to {{ message.to }}
         </div>
       </li>
     </ul>

@@ -19,6 +19,11 @@ io.on('connection', function (socket) {
   socket.on('send message', function (message) {
     io.emit('receive message', message);
   });
+  // Send gift
+  socket.on('send gift', function (gift) {
+    // redis saves the gift here
+    io.emit('receive message', gift);
+  });
   // Leave conversation
   socket.on('leave conversation', function (message) {
     var nickname = message.nickname.toLowerCase(),

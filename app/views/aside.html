@@ -6,17 +6,17 @@
         <h4 class="aside-title"><span class="glyphicon glyphicon-gift"></span> Say thanks with a gift!</h4>
       </div>
       <div class="aside-body">
-        <button type="button" class="btn btn-default form-control" ng-model="selectedGift" 
+        <button type="button" class="btn btn-default form-control" ng-model="theGift" 
                 data-html="1" data-animation="am-flip-x"
                 ng-options="gift.value as gift.label for gift in gifts" bs-select>
           Action <span class="caret"></span>
         </button>
         <div class="text-center"><strong>to</strong></div>
-        <input type="text" class="form-control" ng-model="selectedBuddy" placeholder="Nickname">
+        <input type="text" class="form-control" ng-model="theBuddy" placeholder="Nickname">
       </div>
       <div class="aside-footer">
         <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
-        <button type="button" class="btn btn-primary" ng-click="$hide()">Send</button>
+        <button type="button" class="btn btn-primary" ng-click="sendGift(theGift, theBuddy)">Send</button>
       </div>
   <pre class="text-muted">
   <i>

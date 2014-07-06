@@ -33,17 +33,20 @@ describe('Controller: MainCtrl', function () {
   var MainCtrl,
     scope,
     modal,
+    aside,
     socketMock;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
     modal = jasmine.createSpy('modal'); // spy on modal
+    aside = jasmine.createSpy('aside'); // spy on aside
     socketMock = new SockMock(); // mock the socket.io
     MainCtrl = $controller('MainCtrl', {
       $scope: scope,
       Socket: socketMock,
-      $modal: modal
+      $modal: modal,
+      $aside: aside
     });
   }));
 
@@ -92,7 +95,7 @@ describe('Controller: MainCtrl', function () {
     expect(scope.message).toBeUndefined();
   });
 
-  it('should join a user and close the modal', function () {
+  it('should join a user and hide the modal', function () {
     socketMock.on('join user', function () {
       socketMock.emit('receive message', { 
         status: 'joined',
@@ -109,7 +112,7 @@ describe('Controller: MainCtrl', function () {
     expect(scope.modalInstance.hide).toHaveBeenCalled();
   });
 
-  it('should remove the user from conversation and open the modal', function () {
+  it('should remove the user from conversation and show the modal', function () {
     socketMock.on('leave conversation', function () {
       socketMock.emit('receive message', { 
         status: 'left',
@@ -126,5 +129,25 @@ describe('Controller: MainCtrl', function () {
     scope.leave();
 
     expect(scope.modalInstance.show).toHaveBeenCalled();
+  });
+
+  it('should send gift and hide aside instance', function () {
+    socketMock.on('send gift', function () {
+      socketMock.emit('receive message', { 
+        gift: 'Drink',
+        from: 'Roman',
+        to: 'Rene',
+      });
+    });
+
+    scope.asideInstance = {
+      hide: jasmine.createSpy('scope.asideInstance.hide'),
+      show: jasmine.createSpy('scope.asideInstance.show'),
+    };
+
+    scope.join('Roman');
+    scope.sendGift('Drink', 'Rene');
+
+    expect(scope.asideInstance.hide).toHaveBeenCalled();
   });
 });
