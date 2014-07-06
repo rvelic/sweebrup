@@ -9,7 +9,6 @@
  */
 angular.module('sweebrupApp')
   .controller('MainCtrl', function ($scope, Socket, $modal) {
-
     // init
     $scope.messages = [];
     $scope.glued = false;
@@ -55,6 +54,7 @@ angular.module('sweebrupApp')
         nickname: $scope.user.nickname,
         date: new Date()
       });
+      
       $scope.message = undefined; // clear the input field
     };
 
@@ -70,7 +70,7 @@ angular.module('sweebrupApp')
         $scope.modalInstance.show();
       }
       $scope.messages.push(message);
-      $scope.$apply();
+      $scope.$digest();
       // fire autoscroll when new message appears
       $scope.glued = !$scope.glued;
       $scope.$apply();

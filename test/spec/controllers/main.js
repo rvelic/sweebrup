@@ -4,10 +4,8 @@
   Simple mock for socket.io
   see: https://github.com/btford/angular-socket-io-seed/issues/4
 */
-
 var SockMock = function(){
   this.events = {};
-
   // Receive Events
   this.on = function(eventName, callback){
     if(!this.events[eventName]) {
@@ -15,7 +13,6 @@ var SockMock = function(){
     }
     this.events[eventName].push(callback);
   };
-
   // Send Events
   this.emit = function(eventName, data, emitCallback){
     if(this.events[eventName]){
@@ -30,7 +27,6 @@ var SockMock = function(){
 };
 
 describe('Controller: MainCtrl', function () {
-
   // load the controller's module
   beforeEach(module('sweebrupApp'));
 
@@ -94,11 +90,9 @@ describe('Controller: MainCtrl', function () {
 
     expect(messageReceived).toBe(true);
     expect(scope.message).toBeUndefined();
-
   });
 
   it('should join a user and close the modal', function () {
-    
     socketMock.on('join user', function () {
       socketMock.emit('receive message', { 
         status: 'joined',
@@ -113,11 +107,9 @@ describe('Controller: MainCtrl', function () {
     scope.join('Roman');
 
     expect(scope.modalInstance.hide).toHaveBeenCalled();
-
   });
 
   it('should remove the user from conversation and open the modal', function () {
-    
     socketMock.on('leave conversation', function () {
       socketMock.emit('receive message', { 
         status: 'left',
@@ -134,7 +126,5 @@ describe('Controller: MainCtrl', function () {
     scope.leave();
 
     expect(scope.modalInstance.show).toHaveBeenCalled();
-
   });
-
 });
