@@ -17,4 +17,4 @@ $ grunt
 
 For development with a livereload watcher, you can replace the last command with `$ grunt serve`. This will open your browser at `http://localhost:9000` and watch for file changes.
 
-You will also need a socket.io server which is expected by `app/scripts/services/socket.js`service to be at `http://localhost:3000`. You can use the simple node server bundled in this repo. Just run `$ node server.js`. If you ran 'grunt serve' the socket server will be proxies to `http://localhost:9000/socket.io`
+You will also need a socket.io server which is expected by `app/scripts/services/socket.js`service to be at `http://localhost:3000`. You can use the simple node server bundled in this repo. Just run `$ node server.js`. If you ran 'grunt serve' the socket server will be proxied to `http://localhost:9000/socket.io`
